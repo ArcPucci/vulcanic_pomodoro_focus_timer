@@ -110,37 +110,40 @@ class PremiumScreen extends StatelessWidget {
                   SizedBox(height: 29.h),
                   Opacity(
                     opacity: 0.7,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 114.w,
-                          height: 55.h,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Terms of Use',
-                            style: AppTextStyles.textStyle3,
+                    child: SizedBox(
+                      width: 343.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 114.w,
+                            height: 55.h,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Terms of Use',
+                              style: AppTextStyles.textStyle3,
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 114.w,
-                          height: 55.h,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Restore',
-                            style: AppTextStyles.textStyle3,
+                          Container(
+                            width: 114.w,
+                            height: 55.h,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Restore',
+                              style: AppTextStyles.textStyle3,
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 114.w,
-                          height: 55.h,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Privacy Policy',
-                            style: AppTextStyles.textStyle3,
+                          Container(
+                            width: 114.w,
+                            height: 55.h,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Privacy Policy',
+                              style: AppTextStyles.textStyle3,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

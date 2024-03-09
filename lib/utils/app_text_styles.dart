@@ -51,4 +51,11 @@ class AppTextStyles {
     height: 26 / 18,
     color: Colors.white,
   );
+
+  static final TextStyle textStyle8 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14.r,
+    height: 1,
+    color: AppTheme.gray.withOpacity(0.7),
+  );
 }

@@ -58,21 +58,11 @@ class WelcomeScreen extends StatelessWidget {
               style: AppTextStyles.textStyle4,
             ),
             SizedBox(height: 72.h),
-            Container(
-              width: 170.r,
-              height: 170.r,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: AppTheme.gradient1,
-              ),
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(left: 6.w),
-              child: Image.asset(
-                'assets/png/play.png',
-                width: 54.w,
-                height: 57.h,
-                fit: BoxFit.contain,
-              ),
+            Image.asset(
+              'assets/png/buttons/play.png',
+              width: 170.w,
+              height: 170.h,
+              fit: BoxFit.contain,
             ),
             const Spacer(),
             Image.asset(
