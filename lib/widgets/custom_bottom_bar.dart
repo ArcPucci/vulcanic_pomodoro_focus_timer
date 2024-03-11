@@ -2,12 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
-class CustomBottomBar extends StatelessWidget {
-  const CustomBottomBar({super.key});
+class CustomBottomBar extends StatefulWidget {
+  const CustomBottomBar({super.key, required this.path});
 
+  final String path;
+
+  @override
+  State<CustomBottomBar> createState() => _CustomBottomBarState();
+}
+
+class _CustomBottomBarState extends State<CustomBottomBar> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -28,9 +36,9 @@ class CustomBottomBar extends StatelessWidget {
               tabBarItems.length,
               (index) {
                 final item = tabBarItems[index];
-                final selected = index == 0;
+                final selected = index == getSelected();
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () => setState(() => context.go(item.path)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -70,5 +78,13 @@ class CustomBottomBar extends StatelessWidget {
       );
     }
     return Text(item.title, style: AppTextStyles.textStyle8);
+  }
+
+  int getSelected() {
+    for (int i = tabBarItems.length - 1; i >= 0; i--) {
+      if (widget.path.contains(tabBarItems[i].path)) return i;
+    }
+
+    return 0;
   }
 }

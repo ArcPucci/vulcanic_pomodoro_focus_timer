@@ -11,18 +11,18 @@ final List<TabBarItem> tabBarItems = [
     id: 1,
     title: 'Statistics',
     asset: 'assets/png/icons/statistics.png',
-    path: '/',
+    path: '/statistics',
   ),
   const TabBarItem(
     id: 2,
     title: 'Shop',
     asset: 'assets/png/icons/shop.png',
-    path: '/',
+    path: '/shop',
   ),
   const TabBarItem(
     id: 3,
     title: 'Settings',
     asset: 'assets/png/icons/settings.png',
-    path: '/',
+    path: '/settings',
   ),
 ];

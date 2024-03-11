@@ -6,8 +6,10 @@ class NavigationScreen extends StatelessWidget {
   const NavigationScreen({
     super.key,
     required this.child,
+    required this.path,
   });
 
+  final String path;
   final Widget child;
 
   @override
@@ -21,7 +23,7 @@ class NavigationScreen extends StatelessWidget {
             bottom: 8.h + overlay.bottom,
             left: 0,
             right: 0,
-            child: const Center(child: CustomBottomBar()),
+            child: Center(child: CustomBottomBar(path: path)),
           ),
         ],
       ),

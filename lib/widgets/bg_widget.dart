@@ -10,9 +10,9 @@ class BGWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.black,
-      child: Container(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/png/bg.png'),

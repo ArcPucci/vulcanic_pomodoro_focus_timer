@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vulcanic_pomodoro_focus_timer/screens/screens.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
-import 'package:vulcanic_pomodoro_focus_timer/widgets/timer_card.dart';
+import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
 class TimersScreen extends StatelessWidget {
   const TimersScreen({super.key});
@@ -13,20 +12,10 @@ class TimersScreen extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: 18.h),
-        SizedBox(
-          width: 343.w,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Timers', style: AppTextStyles.textStyle2),
-              Image.asset(
-                'assets/png/buttons/clock.png',
-                width: 50.w,
-                height: 50.h,
-                fit: BoxFit.contain,
-              ),
-            ],
-          ),
+        CustomAppBar(
+          text: 'Timers',
+          button: 'assets/png/buttons/clock.png',
+          onTap: () => onCreateTimer(context),
         ),
         Expanded(
           child: ListView.builder(
@@ -65,6 +54,15 @@ class TimersScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void onCreateTimer(BuildContext context) async {
+    await showBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateTimerSheet();
+      },
     );
   }
 }

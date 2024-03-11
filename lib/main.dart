@@ -70,7 +70,10 @@ class _MyAppState extends State<MyApp> {
             return buildPageWithDefaultTransition(
               context: context,
               state: state,
-              child: NavigationScreen(child: child),
+              child: NavigationScreen(
+                path: state.fullPath ?? '/',
+                child: child,
+              ),
             );
           },
           routes: [
@@ -81,6 +84,36 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   state: state,
                   child: const TimersScreen(),
+                );
+              },
+            ),
+            GoRoute(
+              path: '/statistics',
+              pageBuilder: (context, state) {
+                return buildPageWithDefaultTransition(
+                  context: context,
+                  state: state,
+                  child: const StatisticsScreen(),
+                );
+              },
+            ),
+            GoRoute(
+              path: '/shop',
+              pageBuilder: (context, state) {
+                return buildPageWithDefaultTransition(
+                  context: context,
+                  state: state,
+                  child: const ShopScreen(),
+                );
+              },
+            ),
+            GoRoute(
+              path: '/settings',
+              pageBuilder: (context, state) {
+                return buildPageWithDefaultTransition(
+                  context: context,
+                  state: state,
+                  child: const SettingsScreen(),
                 );
               },
             ),

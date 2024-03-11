@@ -38,10 +38,20 @@ dependencies:
   go_router: ^13.2.0
   flutter_screenutil: ^5.9.0
   provider: ^6.1.2
+  gradient_borders: ^1.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.11
+  intl: ^0.19.0
+  calendar_date_picker2: ^0.5.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/png/app_icon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -49,6 +59,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+
+flutter_native_splash:
+  background_image: "assets/png/splash.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -69,6 +84,7 @@ flutter:
     - assets/png/
     - assets/png/icons/
     - assets/png/backs/
+    - assets/png/volcanoes/
     - assets/png/buttons/
 
   # An image asset can refer to one or more resolution-specific "variants", see

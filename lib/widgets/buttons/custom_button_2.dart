@@ -7,10 +7,14 @@ class CustomButton2 extends StatelessWidget {
     super.key,
     this.onTap,
     required this.text,
+    this.color,
+    this.textStyle,
   });
 
   final VoidCallback? onTap;
+  final Color? color;
   final String text;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +25,12 @@ class CustomButton2 extends StatelessWidget {
         height: 54.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13),
-          color: AppTheme.dark.withOpacity(0.73),
+          color: color ?? AppTheme.dark.withOpacity(0.73),
         ),
         alignment: Alignment.center,
         child: Text(
           text,
-          style: AppTextStyles.textStyle7,
+          style: textStyle ?? AppTextStyles.textStyle7,
         ),
       ),
     );

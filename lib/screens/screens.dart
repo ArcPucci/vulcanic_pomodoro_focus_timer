@@ -3,3 +3,7 @@ export 'welcome_screen.dart';
 export 'premium_screen.dart';
 export 'navigation_screen.dart';
 export 'timers_screen.dart';
+export 'settings_screen.dart';
+export 'statistics_screen.dart';
+export 'shop_screen.dart';
+export 'create_timer_sheet.dart';
