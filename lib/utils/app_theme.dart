@@ -13,6 +13,8 @@ class AppTheme {
   static const Color green = Color(0xFF34C759);
   static const Color light = Color(0xFF787880);
   static const Color whiteGray = Color(0xFFC3BEBE);
+  static const Color systemBlue = Color(0xFF007AFF);
+  static const Color systemRed = Color(0xFFF51313);
 
   static final LinearGradient gradient1 = LinearGradient(
     colors: [

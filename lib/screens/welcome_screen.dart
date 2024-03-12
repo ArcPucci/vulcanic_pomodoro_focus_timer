@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
@@ -65,10 +66,14 @@ class WelcomeScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             const Spacer(),
-            Image.asset(
-              'assets/png/logo2.png',
-              height: 230.h,
-              fit: BoxFit.fitHeight,
+            Transform.scale(
+              scale: 1.8,
+              child: Lottie.asset(
+                'assets/json/standart_work.json',
+                alignment: Alignment.topCenter,
+                height: 230.h,
+                fit: BoxFit.cover,
+              ),
             ),
           ],
         ),

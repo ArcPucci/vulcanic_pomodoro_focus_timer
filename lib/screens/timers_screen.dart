@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vulcanic_pomodoro_focus_timer/screens/screens.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
@@ -26,7 +27,12 @@ class TimersScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
-                child: TimerCard(back: backs[index % 7]),
+                child: TimerCard(
+                  onPlay: () => context.go('/timer'),
+                  onDelete: () => onDelete(context),
+                  onEdit: () => onCreateTimer(context),
+                  back: backs[index % 7],
+                ),
               );
             },
           ),
@@ -62,6 +68,15 @@ class TimersScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CreateTimerSheet();
+      },
+    );
+  }
+
+  void onDelete(BuildContext context) async {
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CustomDeleteDialog();
       },
     );
   }

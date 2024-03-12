@@ -7,26 +7,33 @@ class CustomButton1 extends StatelessWidget {
     super.key,
     this.onTap,
     required this.text,
+    this.enabled = true,
+    this.height,
+    this.textStyle,
   });
 
   final VoidCallback? onTap;
+  final bool enabled;
+  final double? height;
   final String text;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: enabled ? onTap : null,
       child: Container(
         width: 343.w,
-        height: 58.h,
+        height: height ?? 58.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13),
-          gradient: AppTheme.gradient2,
+          gradient: enabled ? AppTheme.gradient2 : null,
+          color: enabled ? null : AppTheme.dark.withOpacity(0.73),
         ),
         alignment: Alignment.center,
         child: Text(
           text,
-          style: AppTextStyles.textStyle7,
+          style: textStyle ?? AppTextStyles.textStyle7,
         ),
       ),
     );

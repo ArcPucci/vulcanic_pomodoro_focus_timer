@@ -8,8 +8,14 @@ class TimerCard extends StatelessWidget {
   const TimerCard({
     super.key,
     required this.back,
+    this.onPlay,
+    this.onDelete,
+    this.onEdit,
   });
 
+  final VoidCallback? onPlay;
+  final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
   final String back;
 
   @override
@@ -69,23 +75,32 @@ class TimerCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(
-                              'assets/png/buttons/delete.png',
-                              width: 35.r,
-                              height: 35.r,
-                              fit: BoxFit.contain,
+                            GestureDetector(
+                              onTap: onDelete,
+                              child: Image.asset(
+                                'assets/png/buttons/delete.png',
+                                width: 35.r,
+                                height: 35.r,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            Image.asset(
-                              'assets/png/buttons/edit.png',
-                              width: 35.r,
-                              height: 35.r,
-                              fit: BoxFit.contain,
+                            GestureDetector(
+                              onTap: onEdit,
+                              child: Image.asset(
+                                'assets/png/buttons/edit.png',
+                                width: 35.r,
+                                height: 35.r,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            Image.asset(
-                              'assets/png/buttons/play.png',
-                              width: 45.r,
-                              height: 46.r,
-                              fit: BoxFit.contain,
+                            GestureDetector(
+                              onTap: onPlay,
+                              child: Image.asset(
+                                'assets/png/buttons/play.png',
+                                width: 45.r,
+                                height: 46.r,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ],
                         ),

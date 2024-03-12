@@ -86,6 +86,18 @@ class _MyAppState extends State<MyApp> {
                   child: const TimersScreen(),
                 );
               },
+              routes: [
+                GoRoute(
+                  path: 'timer',
+                  pageBuilder: (context, state) {
+                    return buildPageWithDefaultTransition(
+                      context: context,
+                      state: state,
+                      child: const TimerScreen(),
+                    );
+                  },
+                ),
+              ],
             ),
             GoRoute(
               path: '/statistics',
@@ -130,7 +142,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        fontFamily: 'Jost',
       ),
       routerConfig: _router,
     );

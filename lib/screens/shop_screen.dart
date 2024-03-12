@@ -24,7 +24,10 @@ class ShopScreen extends StatelessWidget {
               final volcano = volcanoes[index];
               return Padding(
                 padding: EdgeInsets.only(bottom: 12.h),
-                child: VolcanoCard(volcano: volcano),
+                child: VolcanoCard(
+                  selected: index == 0,
+                  volcano: volcano,
+                ),
               );
             },
           ),

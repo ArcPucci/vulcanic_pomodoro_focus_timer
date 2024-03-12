@@ -43,6 +43,8 @@ dependencies:
   flutter_native_splash: ^2.3.11
   intl: ^0.19.0
   calendar_date_picker2: ^0.5.5
+  percent_indicator: ^4.2.3
+  lottie: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +88,7 @@ flutter:
     - assets/png/backs/
     - assets/png/volcanoes/
     - assets/png/buttons/
+    - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -131,5 +134,9 @@ flutter:
           weight: 800
         - asset: assets/fonts/Jost-Black.ttf
           weight: 900
+    - family: Mont
+      fonts:
+        - asset: assets/fonts/MontSemiBold.ttf
+          weight: 600
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

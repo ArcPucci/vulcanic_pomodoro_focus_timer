@@ -6,4 +6,4 @@ export 'timers_screen.dart';
 export 'settings_screen.dart';
 export 'statistics_screen.dart';
 export 'shop_screen.dart';
-export 'create_timer_sheet.dart';
+export 'timer_screen.dart';

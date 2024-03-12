@@ -60,7 +60,7 @@ class VolcanoCard extends StatelessWidget {
                 ],
               ),
             ),
-            const CustomRadioButton(selected: false),
+            CustomRadioButton(selected: selected),
           ],
         ),
       ),
