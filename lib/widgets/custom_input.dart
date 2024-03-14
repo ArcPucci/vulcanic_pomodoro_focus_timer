@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
@@ -8,11 +9,15 @@ class CustomInput extends StatelessWidget {
     this.minLines,
     this.maxLength,
     required this.hintText,
+    required this.controller,
+    this.focusNode,
   });
 
   final int? maxLength;
   final int? minLines;
   final String hintText;
+  final FocusNode? focusNode;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +29,15 @@ class CustomInput extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: TextField(
+        focusNode: focusNode,
+        controller: controller,
         style: AppTextStyles.textStyle8.copyWith(
           fontSize: 18.r,
           color: AppTheme.white.withOpacity(0.9),
         ),
-        keyboardType: TextInputType.multiline,
+        inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
         minLines: minLines,
-        maxLines: null,
+        maxLines: minLines,
         decoration: InputDecoration.collapsed(
           hintText: hintText,
           hintStyle: AppTextStyles.textStyle8.copyWith(

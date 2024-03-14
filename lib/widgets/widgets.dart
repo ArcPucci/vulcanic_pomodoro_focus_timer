@@ -18,3 +18,4 @@ export 'game_app_bar.dart';
 export 'dialogs/custom_exit_dialog.dart';
 export 'dialogs/custom_delete_dialog.dart';
 export 'create_timer_sheet.dart';
+export 'comment_widget.dart';

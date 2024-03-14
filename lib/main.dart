@@ -3,14 +3,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vulcanic_pomodoro_focus_timer/providers/providers.dart';
 import 'package:vulcanic_pomodoro_focus_timer/screens/screens.dart';
+import 'package:vulcanic_pomodoro_focus_timer/services/services.dart';
 
 void main() {
-  runZonedGuarded(() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final preferences = await SharedPreferences.getInstance();
+
+    final sqlService = SqlService();
+    await sqlService.init();
+
     runApp(ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) {
-        return const MyApp();
+        return MyApp(
+          sqlService: sqlService,
+          sharedPreferences: preferences,
+        );
       },
     ));
   }, (error, stack) {
@@ -40,7 +54,14 @@ CustomTransitionPage buildPageWithDefaultTransition({
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.sqlService,
+    required this.sharedPreferences,
+  });
+
+  final SqlService sqlService;
+  final SharedPreferences sharedPreferences;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -52,6 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     _router = GoRouter(
       initialLocation: '/',
       routes: [
@@ -137,13 +159,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => TimersService(widget.sqlService.database),
+        ),
+        Provider(
+          create: (context) => PreferencesService(widget.sharedPreferences),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TimersProvider(
+            preferencesService: Provider.of(context, listen: false),
+            service: Provider.of(context, listen: false),
+            router: _router,
+          )..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StoreProvider(
+            preferencesService: Provider.of(context, listen: false),
+          )..init(),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        routerConfig: _router,
       ),
-      routerConfig: _router,
     );
   }
 }

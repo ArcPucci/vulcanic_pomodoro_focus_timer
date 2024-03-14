@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
-class CustomTimePicker extends StatelessWidget {
+class CustomTimePicker extends StatefulWidget {
   const CustomTimePicker({
     super.key,
     required this.asset,
@@ -17,6 +17,25 @@ class CustomTimePicker extends StatelessWidget {
   final String asset;
   final int value;
   final void Function(int minutes) onChanged;
+
+  @override
+  State<CustomTimePicker> createState() => _CustomTimePickerState();
+}
+
+class _CustomTimePickerState extends State<CustomTimePicker> {
+  late FixedExtentScrollController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    int index = widget.value;
+    if (index == 0) {
+      index = 60;
+    } else {
+      index--;
+    }
+    controller = FixedExtentScrollController(initialItem: index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +54,7 @@ class CustomTimePicker extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            asset,
+            widget.asset,
             width: 32.w,
             height: 32.h,
             fit: BoxFit.contain,
@@ -46,12 +65,13 @@ class CustomTimePicker extends StatelessWidget {
             height: 146.h,
             color: Colors.transparent,
             child: CupertinoPicker(
+              scrollController: controller,
               itemExtent: 38.h,
               diameterRatio: 999,
               squeeze: 1.2,
               looping: true,
               selectionOverlay: SizedBox(),
-              onSelectedItemChanged: (value) => onChanged(value + 1),
+              onSelectedItemChanged: (value) => widget.onChanged(value + 1),
               children: List.generate(
                 60,
                 (index) {
@@ -76,7 +96,7 @@ class CustomTimePicker extends StatelessWidget {
   }
 
   Widget _buildText(int index) {
-    if (index + 1 == value)
+    if (index + 1 == widget.value)
       return ShaderMask(
         shaderCallback: (Rect bounds) {
           return AppTheme.gradient1.createShader(bounds);
@@ -87,7 +107,7 @@ class CustomTimePicker extends StatelessWidget {
         ),
       );
 
-    if (max(value, index + 1) - min(value, index + 1) == 1 ||
+    if (max(widget.value, index + 1) - min(widget.value, index + 1) == 1 ||
         index == 59 ||
         index == 0)
       return Text(

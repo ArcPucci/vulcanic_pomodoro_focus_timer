@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
 class TimerCard extends StatelessWidget {
@@ -11,12 +12,14 @@ class TimerCard extends StatelessWidget {
     this.onPlay,
     this.onDelete,
     this.onEdit,
+    required this.timerView,
   });
 
   final VoidCallback? onPlay;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
   final String back;
+  final TimerView timerView;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class TimerCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Training',
+                    timerView.name,
                     style: AppTextStyles.textStyle2.copyWith(
                       fontSize: 22.r,
                     ),
@@ -61,11 +64,11 @@ class TimerCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Work: 25 min',
+                            'Work: ${timerView.workTime} min',
                             style: AppTextStyles.textStyle3,
                           ),
                           Text(
-                            'Rest: 5 min',
+                            'Rest: ${timerView.restTime} min',
                             style: AppTextStyles.textStyle3,
                           ),
                         ],

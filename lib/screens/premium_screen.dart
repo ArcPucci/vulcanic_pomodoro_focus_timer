@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:vulcanic_pomodoro_focus_timer/providers/providers.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
@@ -28,11 +30,14 @@ class PremiumScreen extends StatelessWidget {
                   Container(
                     width: 343.w,
                     alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      'assets/png/icons/close.png',
-                      width: 40.w,
-                      height: 40.h,
-                      fit: BoxFit.contain,
+                    child: GestureDetector(
+                      onTap: Navigator.of(context).pop,
+                      child: Image.asset(
+                        'assets/png/icons/close.png',
+                        width: 40.w,
+                        height: 40.h,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                   SizedBox(height: 39.h),
@@ -104,9 +109,15 @@ class PremiumScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const CustomButton1(text: 'Get Premium for \$0.99'),
+                  CustomButton1(
+                    text: 'Get Premium for \$0.99',
+                    onTap: () => onBuyPremium(context),
+                  ),
                   SizedBox(height: 8.h),
-                  const CustomButton2(text: 'No Thanks'),
+                  CustomButton2(
+                    text: 'No Thanks',
+                    onTap: Navigator.of(context).pop,
+                  ),
                   SizedBox(height: 29.h),
                   Opacity(
                     opacity: 0.7,
@@ -124,13 +135,17 @@ class PremiumScreen extends StatelessWidget {
                               style: AppTextStyles.textStyle3,
                             ),
                           ),
-                          Container(
-                            width: 114.w,
-                            height: 55.h,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Restore',
-                              style: AppTextStyles.textStyle3,
+                          GestureDetector(
+                            onTap: () => onBuyPremium(context),
+                            child: Container(
+                              width: 114.w,
+                              height: 55.h,
+                              color: Colors.transparent,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Restore',
+                                style: AppTextStyles.textStyle3,
+                              ),
                             ),
                           ),
                           Container(
@@ -153,5 +168,14 @@ class PremiumScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onBuyPremium(BuildContext context) {
+    final provider = Provider.of<StoreProvider>(
+      context,
+      listen: false,
+    );
+    provider.onBuyPremium();
+    Navigator.of(context).pop();
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:vulcanic_pomodoro_focus_timer/providers/providers.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
@@ -10,34 +11,49 @@ class TimersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 18.h),
-        CustomAppBar(
-          text: 'Timers',
-          button: 'assets/png/buttons/clock.png',
-          onTap: () => onCreateTimer(context),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.w,
-              vertical: 24.h,
+    return Consumer<TimersProvider>(
+      builder: (BuildContext context, value, Widget? child) {
+        return Column(
+          children: [
+            SizedBox(height: 18.h),
+            CustomAppBar(
+              text: 'Timers',
+              button: 'assets/png/buttons/clock.png',
+              onTap: () => onCreateTimer(context),
             ),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(bottom: 16.h),
-                child: TimerCard(
-                  onPlay: () => context.go('/timer'),
-                  onDelete: () => onDelete(context),
-                  onEdit: () => onCreateTimer(context),
-                  back: backs[index % 7],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+            Expanded(
+              child: value.timers.isEmpty
+                  ? _buildEmptyBody()
+                  : ListView.builder(
+                      itemCount: value.timers.length,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 24.h,
+                      ),
+                      itemBuilder: (context, index) {
+                        final timerView = value.timers[index];
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 16.h),
+                          child: TimerCard(
+                            onPlay: () => value.onSelectTimer(timerView),
+                            onDelete: () async {
+                              if (!await onDelete(context)) return;
+                              value.onDeleteTimer(timerView);
+                            },
+                            onEdit: () {
+                              value.onChangeTimer(timerView);
+                              onEditTimer(context);
+                            },
+                            back: backs[index % 7],
+                            timerView: timerView,
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -67,13 +83,27 @@ class TimersScreen extends StatelessWidget {
     await showBottomSheet(
       context: context,
       builder: (context) {
-        return CreateTimerSheet();
+        return CreateTimerSheet(
+          timersProvider: Provider.of(context, listen: false),
+        );
       },
     );
   }
 
-  void onDelete(BuildContext context) async {
-    await showCupertinoDialog(
+  void onEditTimer(BuildContext context) async {
+    await showBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateTimerSheet(
+          isEdit: true,
+          timersProvider: Provider.of(context, listen: false),
+        );
+      },
+    );
+  }
+
+  Future<bool> onDelete(BuildContext context) async {
+    return await showCupertinoDialog(
       context: context,
       builder: (context) {
         return CustomDeleteDialog();
