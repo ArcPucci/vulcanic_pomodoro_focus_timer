@@ -41,6 +41,9 @@ class TimerProvider extends ChangeNotifier {
 
   void init() {
     _seconds = timerView.workTime * 60;
+    _workTime = true;
+    _work = 0;
+    _rest = 0;
   }
 
   void onStart() {

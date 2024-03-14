@@ -10,9 +10,11 @@ class CreateTimerSheet extends StatefulWidget {
     super.key,
     this.isEdit = false,
     required this.timersProvider,
+    this.onClose,
   });
 
   final TimersProvider timersProvider;
+  final VoidCallback? onClose;
   final bool isEdit;
 
   @override
@@ -80,37 +82,43 @@ class _CreateTimerSheetState extends State<CreateTimerSheet> {
                     padding: EdgeInsets.symmetric(vertical: 24.h),
                     child: Column(
                       children: [
-                        if (!keyboardOpen) ...[
-                          CustomInput(
-                            hintText: 'Name',
-                            minLines: 1,
-                            maxLength: 24,
-                            controller: nameController,
-                          ),
-                          SizedBox(height: 24.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Visibility(
+                          visible: !keyboardOpen,
+                          child: Column(
                             children: [
-                              CustomTimePicker(
-                                value: workMinutes,
-                                asset: 'assets/png/work.png',
-                                onChanged: (int minutes) {
-                                  workMinutes = minutes;
-                                  setState(() {});
-                                },
+                              CustomInput(
+                                hintText: 'Name',
+                                minLines: 1,
+                                maxLength: 24,
+                                controller: nameController,
                               ),
-                              CustomTimePicker(
-                                value: restMinutes,
-                                asset: 'assets/png/rest.png',
-                                onChanged: (int minutes) {
-                                  restMinutes = minutes;
-                                  setState(() {});
-                                },
+                              SizedBox(height: 24.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  CustomTimePicker(
+                                    value: workMinutes,
+                                    asset: 'assets/png/work.png',
+                                    onChanged: (int minutes) {
+                                      workMinutes = minutes;
+                                      setState(() {});
+                                    },
+                                  ),
+                                  CustomTimePicker(
+                                    value: restMinutes,
+                                    asset: 'assets/png/rest.png',
+                                    onChanged: (int minutes) {
+                                      restMinutes = minutes;
+                                      setState(() {});
+                                    },
+                                  ),
+                                ],
                               ),
+                              SizedBox(height: 24.h),
                             ],
                           ),
-                          SizedBox(height: 24.h),
-                        ],
+                        ),
                         CustomInput(
                           hintText: 'Notes (70 symbols max)',
                           minLines: 10,
@@ -118,41 +126,46 @@ class _CreateTimerSheetState extends State<CreateTimerSheet> {
                           focusNode: focusNode,
                           controller: commentController,
                         ),
-                        if (!keyboardOpen) ...[
-                          SizedBox(height: 24.h),
-                          SizedBox(
-                            width: 343.w,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Notification:',
-                                  style: AppTextStyles.textStyle2.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 20.r,
-                                  ),
+                        Visibility(
+                          visible: !keyboardOpen,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 24.h),
+                              SizedBox(
+                                width: 343.w,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Notification:',
+                                      style: AppTextStyles.textStyle2.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 20.r,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.w),
+                                    CustomSwitch1(
+                                      value: enabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          enabled = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 20.w),
-                                CustomSwitch1(
-                                  value: enabled,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      enabled = value;
-                                    });
-                                  },
+                              ),
+                              SizedBox(height: 20.h),
+                              CustomButton1(
+                                text: widget.isEdit ? 'Save' : 'Create',
+                                enabled: canSubmit,
+                                textStyle: AppTextStyles.textStyle2.copyWith(
+                                  fontSize: 22.r,
                                 ),
-                              ],
-                            ),
+                                onTap: widget.isEdit ? onSave : onCreate,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 20.h),
-                          CustomButton1(
-                            text: widget.isEdit ? 'Save' : 'Create',
-                            enabled: canSubmit,
-                            textStyle: AppTextStyles.textStyle2.copyWith(
-                              fontSize: 22.r,
-                            ),
-                            onTap: widget.isEdit ? onSave : onCreate,
-                          ),
-                        ],
+                        ),
                       ],
                     ),
                   ),
@@ -212,6 +225,7 @@ class _CreateTimerSheetState extends State<CreateTimerSheet> {
       notificationEnabled: enabled,
     );
     widget.timersProvider.onEditTimer(newTimerView);
+    widget.onClose?.call();
     Navigator.of(context).pop(true);
     onClear();
   }

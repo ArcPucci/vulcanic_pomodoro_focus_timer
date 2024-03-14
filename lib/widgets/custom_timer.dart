@@ -36,13 +36,13 @@ class CustomTimer extends StatelessWidget {
             return Positioned(
               left: 0,
               right: 0,
-              bottom: 205.h,
+              bottom: value.volcano.id == 0 ? 230.h : 200.h,
               child: Center(
                 child: Transform.scale(
                   scale: 2,
                   child: Lottie.asset(
                     workTime ? value.volcano.workJson : value.volcano.restJson,
-                    height: 297.r,
+                    width: 220.w,
                     fit: BoxFit.contain,
                   ),
                 ),

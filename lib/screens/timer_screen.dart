@@ -76,10 +76,7 @@ class TimerScreen extends StatelessWidget {
                 right: 16.w,
                 child: GameAppBar(
                   onExit: () => onLeave(context),
-                  onEdit: () async {
-                    await onEditTimer(context);
-                    print('object');
-                  },
+                  onEdit: () async => await onEditTimer(context, value),
                   onDelete: () async {
                     if (!await onDelete(context)) return;
                     value2.onDeleteTimer(value.timerView);
@@ -115,12 +112,13 @@ class TimerScreen extends StatelessWidget {
     );
   }
 
-  Future<void> onEditTimer(BuildContext context) async {
+  Future<void> onEditTimer(BuildContext context, TimerProvider value) async {
     await showBottomSheet(
       context: context,
       builder: (context) {
         return CreateTimerSheet(
           isEdit: true,
+          onClose: () => value.init(),
           timersProvider: Provider.of(context, listen: false),
         );
       },
