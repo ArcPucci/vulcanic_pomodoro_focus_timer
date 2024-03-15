@@ -14,6 +14,7 @@ class StatisticsScreen extends StatelessWidget {
         CustomAppBar(
           text: 'Statistics',
           button: 'assets/png/buttons/calendar.png',
+          onTap: () => onShowCalendar(context),
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -71,6 +72,32 @@ class StatisticsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void onShowCalendar(BuildContext context) async {
+    await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2050),
+      builder: (context, child) {
+        return SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 18.h),
+              CustomAppBar(
+                text: 'Statistics',
+                button: 'assets/png/buttons/calendar2.png',
+                onTap: Navigator.of(context).pop,
+              ),
+              SizedBox(height: 12.h),
+              CalendarWidget(
+                initialDate: DateTime.now(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -11,27 +11,19 @@ class CalendarWidget extends StatefulWidget {
   const CalendarWidget({
     Key? key,
     required this.initialDate,
-    required this.onNextMonth,
-    required this.onPrevMonth,
-    this.firstDate,
-    this.secondDate,
-    required this.onChangeFirstDate,
-    required this.onChangeSecondDate,
   }) : super(key: key);
 
   final DateTime initialDate;
-  final DateTime? firstDate;
-  final DateTime? secondDate;
-  final void Function(DateTime dateTime) onNextMonth;
-  final void Function(DateTime dateTime) onPrevMonth;
-  final void Function(DateTime? dateTime) onChangeFirstDate;
-  final void Function(DateTime? dateTime) onChangeSecondDate;
 
   @override
   State<CalendarWidget> createState() => _CalendarWidgetState();
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
+  DateTime initDate = DateTime.now().withZeroTime;
+
+  List<DateTime> _dates = [];
+
   static const _x = 7;
   static const _y = 5;
   static const _n = 35;
@@ -55,8 +47,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
-    _calculateDays();
     super.initState();
+    initDate = widget.initialDate.withZeroTime;
+    _calculateDays();
   }
 
   @override
@@ -67,10 +60,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   void _calculateDays() {
     days.clear();
-    final int year = widget.initialDate.year;
-    final int month = widget.initialDate.month;
+    final int year = initDate.year;
+    final int month = initDate.month;
 
-    final prevMonth = widget.initialDate.copyWith(month: month - 1).month;
+    final prevMonth = initDate.copyWith(month: month - 1).month;
 
     final int daysInPrevMonth = DateUtils.getDaysInMonth(year, prevMonth);
     final int daysInMonth = DateUtils.getDaysInMonth(year, month);
@@ -92,7 +85,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         canSelected: false,
         isCurrentMonth: false,
         isCurrentDay: false,
-        selectedDay: widget.initialDate.withZeroTime == dateTime,
+        selectedDay: initDate.withZeroTime == dateTime,
       ));
       n--;
     }
@@ -105,7 +98,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           canSelected: true,
           isCurrentMonth: true,
           isCurrentDay: dateTime == currentDateTime.withZeroTime,
-          selectedDay: widget.initialDate.withZeroTime == dateTime,
+          selectedDay: initDate.withZeroTime == dateTime,
         ),
       );
       n--;
@@ -117,7 +110,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         canSelected: false,
         isCurrentMonth: false,
         isCurrentDay: false,
-        selectedDay: widget.initialDate.withZeroTime == dateTime,
+        selectedDay: initDate.withZeroTime == dateTime,
       ));
     }
   }
@@ -126,6 +119,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     int index = 0;
     int index2 = 0;
+    int index3 = 0;
     return Container(
       width: 343.w,
       height: 370.h,
@@ -152,10 +146,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    final initDate = widget.initialDate.withZeroTime;
-                    final date =
-                        widget.initialDate.copyWith(month: initDate.month - 1);
-                    widget.onPrevMonth(date);
+                    final prevMonth = initDate.month - 1;
+                    initDate = initDate.copyWith(month: prevMonth);
+                    _calculateDays();
+                    setState(() {});
                   },
                   child: Transform.rotate(
                     angle: pi,
@@ -168,17 +162,17 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   ),
                 ),
                 Text(
-                  DateFormat('MMMM y').format(widget.initialDate),
+                  DateFormat('MMMM y').format(initDate),
                   style: AppTextStyles.textStyle2.copyWith(
                     fontSize: 16.r,
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    final initDate = widget.initialDate.withZeroTime;
-                    final date =
-                        widget.initialDate.copyWith(month: initDate.month + 1);
-                    widget.onNextMonth(date);
+                    final nextMonth = initDate.month + 1;
+                    initDate = initDate.copyWith(month: nextMonth);
+                    _calculateDays();
+                    setState(() {});
                   },
                   child: Image.asset(
                     'assets/png/buttons/next.png',
@@ -215,13 +209,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           _x,
                           (x) {
                             final day = days[index++];
-                            final date = widget.initialDate
-                                .copyWith(day: day.id)
-                                .withZeroTime;
-                            final selected = (widget.firstDate?.withZeroTime ==
-                                        date ||
-                                    widget.secondDate?.withZeroTime == date) &&
-                                (day.canSelected);
+                            final date = initDate.copyWith(day: day.id);
+                            final selected =
+                                _dates.contains(date) && day.isCurrentMonth;
                             return Container(
                               width: 21.w,
                               height: 20.h,
@@ -259,42 +249,103 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             _x,
                             (x) {
                               final day = days[index2++];
-                              final date = widget.initialDate
-                                  .copyWith(day: day.id)
-                                  .withZeroTime;
-                              final between = widget.firstDate != null &&
-                                  widget.secondDate != null &&
-                                  (widget.firstDate!.isBefore(date) &&
-                                      widget.secondDate!.isAfter(date)) &&
-                                  day.isCurrentMonth;
+                              final date = initDate.copyWith(day: day.id);
+                              final between =
+                                  isBetween(date) && day.isCurrentMonth;
+                              final isFirstDate =
+                                  firstDate(date) && day.isCurrentMonth;
+                              final isSecondDate =
+                                  secondDate(date) && day.isCurrentMonth;
                               return GestureDetector(
                                 onTap: () {
-                                  if (!day.canSelected) return;
-                                  if (widget.secondDate != null ||
-                                      widget.firstDate == null) {
-                                    widget.onChangeFirstDate(date);
-                                    widget.onChangeSecondDate(null);
-                                    return;
+                                  if (_dates.length == 2) {
+                                    _dates.clear();
+                                    setState(() {});
                                   }
-                                  widget.onChangeSecondDate(date);
+                                  if (_dates.contains(date)) return;
+                                  _dates.add(date);
+                                  _dates.sort((a, b) => a.compareTo(b));
+                                  setState(() {});
                                 },
                                 child: Container(
-                                  width: 21.w,
+                                  width: 291.w / 7,
                                   height: 20.h,
                                   color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  // child: Container(
-                                  //   color: between
-                                  //       ? AppTheme.purple.withOpacity(0.31)
-                                  //       : null,
-                                  //   height: 14.r,
-                                  // ),
+                                  alignment: isFirstDate
+                                      ? Alignment.centerRight
+                                      : isSecondDate
+                                          ? Alignment.centerLeft
+                                          : Alignment.center,
+                                  child: Container(
+                                    width: (isSecondDate)
+                                        ? ((291.w / 7) - 0.w) / 2
+                                        : isFirstDate
+                                            ? ((291.w / 7) - 0.w) / 2
+                                            : 291.w / 7,
+                                    // width: 10.w,
+                                    color:
+                                        (between || isFirstDate || isSecondDate)
+                                            ? AppTheme.purple.withOpacity(0.31)
+                                            : null,
+                                    height: 14.r,
+                                  ),
                                 ),
                               );
                             },
                           ),
                         );
                       },
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      _y,
+                      (y) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                          _x,
+                          (x) {
+                            final day = days[index3++];
+                            final date = initDate.copyWith(day: day.id);
+                            final selected =
+                                _dates.contains(date) && day.isCurrentMonth;
+                            return GestureDetector(
+                              onTap: () {
+                                if (_dates.length == 2) {
+                                  _dates.clear();
+                                  setState(() {});
+                                }
+                                if (_dates.contains(date)) return;
+                                _dates.add(date);
+                                _dates.sort((a, b) => a.compareTo(b));
+                                setState(() {});
+                              },
+                              child: Container(
+                                width: 21.w,
+                                height: 20.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  color: selected ? null : Colors.transparent,
+                                  gradient: selected ? AppTheme.gradient1 : null,
+                                ),
+                                alignment: Alignment.center,
+                                child: selected
+                                    ? Text(
+                                        '${day.id}',
+                                        style: AppTextStyles.textStyle2.copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14.r,
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -348,6 +399,25 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
       ),
     );
+  }
+
+  bool firstDate(DateTime dateTime) {
+    if (_dates.length != 2) return false;
+    if (_dates.first.isAtSameMomentAs(dateTime)) return true;
+    return false;
+  }
+
+  bool secondDate(DateTime dateTime) {
+    if (_dates.length != 2) return false;
+    if (_dates.last.isAtSameMomentAs(dateTime)) return true;
+    return false;
+  }
+
+  bool isBetween(DateTime dateTime) {
+    if (_dates.length != 2) return false;
+    if (_dates.first.isBefore(dateTime) && _dates.last.isAfter(dateTime))
+      return true;
+    return false;
   }
 }
 
