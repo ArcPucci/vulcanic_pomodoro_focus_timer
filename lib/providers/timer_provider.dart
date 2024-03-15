@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/providers/providers.dart';
+import 'package:vulcanic_pomodoro_focus_timer/services/services.dart';
 
 class TimerProvider extends ChangeNotifier {
   final TimersProvider _provider;
@@ -40,7 +41,8 @@ class TimerProvider extends ChangeNotifier {
   bool get canReset => percent > 0;
 
   void init() {
-    _seconds = timerView.workTime * 60;
+    // _seconds = timerView.workTime * 60;
+    _seconds = 30;
     _workTime = true;
     _work = 0;
     _rest = 0;
@@ -56,9 +58,21 @@ class TimerProvider extends ChangeNotifier {
             if (_workTime) {
               _work++;
               _seconds = timerView.restTime * 60;
+
+              if(timerView.notificationEnabled)
+              NotificationService().showNotification(
+                title: 'Working time is over!',
+                body: 'Time to take a break',
+              );
             } else {
               _rest++;
               _seconds = timerView.workTime * 60;
+
+              if(timerView.notificationEnabled)
+              NotificationService().showNotification(
+                title: 'The rest is over!',
+                body: 'Time to work',
+              );
             }
             _workTime = !_workTime;
             notifyListeners();

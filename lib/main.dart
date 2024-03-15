@@ -13,6 +13,8 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    NotificationService().init();
+
     final preferences = await SharedPreferences.getInstance();
 
     final sqlService = SqlService();
