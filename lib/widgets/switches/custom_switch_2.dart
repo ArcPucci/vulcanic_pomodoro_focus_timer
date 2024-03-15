@@ -27,8 +27,7 @@ class CustomSwitch2 extends StatelessWidget {
               height: 32.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(37),
-                color: value ? null : AppTheme.red.withOpacity(0.74),
-                gradient: value ? AppTheme.gradient1 : null,
+                gradient: AppTheme.gradient1,
               ),
             ),
             Positioned.fill(

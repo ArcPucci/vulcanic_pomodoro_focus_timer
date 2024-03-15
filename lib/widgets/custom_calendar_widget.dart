@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:intl/intl.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
+import 'package:vulcanic_pomodoro_focus_timer/widgets/switches/custom_switch_2.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -21,6 +22,7 @@ class CalendarWidget extends StatefulWidget {
 
 class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime initDate = DateTime.now().withZeroTime;
+  bool _isDates = true;
 
   List<DateTime> _dates = [];
 
@@ -117,9 +119,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    int index = 0;
-    int index2 = 0;
-    int index3 = 0;
     return Container(
       width: 343.w,
       height: 370.h,
@@ -132,48 +131,55 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
       ),
       padding: EdgeInsets.only(
-        left: 30.w,
-        right: 20.w,
         top: 24.h,
         bottom: 20.h,
       ),
       child: Column(
         children: [
-          SizedBox(
-            width: 197.w,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    final prevMonth = initDate.month - 1;
-                    initDate = initDate.copyWith(month: prevMonth);
-                    _calculateDays();
-                    setState(() {});
-                  },
-                  child: Transform.rotate(
-                    angle: pi,
-                    child: Image.asset(
-                      'assets/png/buttons/next.png',
-                      width: 30.w,
-                      height: 30.h,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                Text(
-                  DateFormat('MMMM y').format(initDate),
-                  style: AppTextStyles.textStyle2.copyWith(
-                    fontSize: 16.r,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    final nextMonth = initDate.month + 1;
-                    initDate = initDate.copyWith(month: nextMonth);
-                    _calculateDays();
-                    setState(() {});
-                  },
+          Expanded(
+            child: _isDates ? _buildDates() : _buildMonths(),
+          ),
+          SizedBox(height: 30.h),
+          Row(
+            children: [
+              SizedBox(width: 36.w),
+              CustomSwitch2(
+                value: _isDates,
+                onChanged: (value) => setState(() => _isDates = !_isDates),
+              ),
+              Spacer(),
+              CustomIconButton(
+                asset: 'assets/png/icons/reset.png',
+                onTap: onReset,
+              ),
+              SizedBox(width: 20.w),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDates() {
+    int index = 0;
+    int index2 = 0;
+    int index3 = 0;
+    return Column(
+      children: [
+        SizedBox(
+          width: 197.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  final prevMonth = initDate.month - 1;
+                  initDate = initDate.copyWith(month: prevMonth);
+                  _calculateDays();
+                  setState(() {});
+                },
+                child: Transform.rotate(
+                  angle: pi,
                   child: Image.asset(
                     'assets/png/buttons/next.png',
                     width: 30.w,
@@ -181,11 +187,37 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     fit: BoxFit.contain,
                   ),
                 ),
-              ],
-            ),
+              ),
+              Text(
+                DateFormat('MMMM y').format(initDate),
+                style: AppTextStyles.textStyle2.copyWith(
+                  fontSize: 16.r,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  final nextMonth = initDate.month + 1;
+                  initDate = initDate.copyWith(month: nextMonth);
+                  _calculateDays();
+                  setState(() {});
+                },
+                child: Image.asset(
+                  'assets/png/buttons/next.png',
+                  width: 30.w,
+                  height: 30.h,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 28.h),
-          Row(
+        ),
+        SizedBox(height: 28.h),
+        Padding(
+          padding: EdgeInsets.only(
+            left: 30.w,
+            right: 20.w,
+          ),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(
               _x,
@@ -194,8 +226,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               },
             ),
           ),
-          SizedBox(height: 20.h),
-          Expanded(
+        ),
+        SizedBox(height: 20.h),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 30.w,
+              right: 20.w,
+            ),
             child: Stack(
               children: [
                 Positioned.fill(
@@ -329,13 +367,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3),
                                   color: selected ? null : Colors.transparent,
-                                  gradient: selected ? AppTheme.gradient1 : null,
+                                  gradient:
+                                      selected ? AppTheme.gradient1 : null,
                                 ),
                                 alignment: Alignment.center,
                                 child: selected
                                     ? Text(
                                         '${day.id}',
-                                        style: AppTextStyles.textStyle2.copyWith(
+                                        style:
+                                            AppTextStyles.textStyle2.copyWith(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14.r,
                                         ),
@@ -352,17 +392,106 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               ],
             ),
           ),
-          SizedBox(height: 30.h),
-          Row(
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMonths() {
+    return Column(
+      children: [
+        SizedBox(
+          width: 148.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 6.w),
-              SizedBox(width: 167.w),
-              Spacer(),
-              CustomIconButton(asset: 'assets/png/icons/reset.png'),
+              GestureDetector(
+                onTap: () {
+                  final prevYear = initDate.year - 1;
+                  initDate = initDate.copyWith(year: prevYear);
+                  _calculateDays();
+                  setState(() {});
+                },
+                child: Transform.rotate(
+                  angle: pi,
+                  child: Image.asset(
+                    'assets/png/buttons/next.png',
+                    width: 30.w,
+                    height: 30.h,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Text(
+                '${initDate.year}',
+                style: AppTextStyles.textStyle2.copyWith(
+                  fontSize: 16.r,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  final nextYear = initDate.year + 1;
+                  initDate = initDate.copyWith(year: nextYear);
+                  _calculateDays();
+                  setState(() {});
+                },
+                child: Image.asset(
+                  'assets/png/buttons/next.png',
+                  width: 30.w,
+                  height: 30.h,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ],
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: 36.h),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(
+                3,
+                (i) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      4,
+                      (j) {
+                        final index = i + j * 3;
+                        final selected = initDate.month == index + 1;
+                        return GestureDetector(
+                          onTap: () {
+                            initDate = initDate.copyWith(month: index + 1);
+                            setState(() {});
+                          },
+                          child: Container(
+                            width: 91.w,
+                            height: 30.h,
+                            decoration: BoxDecoration(
+                              gradient: selected ? AppTheme.gradient1 : null,
+                              color: selected ? null : Colors.transparent,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              months[index],
+                              style: AppTextStyles.textStyle2.copyWith(
+                                fontSize: 18.r,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -418,6 +547,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     if (_dates.first.isBefore(dateTime) && _dates.last.isAfter(dateTime))
       return true;
     return false;
+  }
+
+  void onReset() {
+    _dates.clear();
+    initDate = DateTime.now().withZeroTime;
+    setState(() {});
   }
 }
 

@@ -16,18 +16,21 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 36.w,
-      height: 36.h,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: enabled ? AppTheme.gradient1 : null,
-        color: enabled ? null : AppTheme.dark.withOpacity(0.73),
-      ),
-      alignment: Alignment.center,
-      child: Image.asset(
-        asset,
-        fit: BoxFit.contain,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 36.w,
+        height: 36.h,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: enabled ? AppTheme.gradient1 : null,
+          color: enabled ? null : AppTheme.dark.withOpacity(0.73),
+        ),
+        alignment: Alignment.center,
+        child: Image.asset(
+          asset,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
