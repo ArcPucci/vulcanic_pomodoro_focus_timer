@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
 class StatisticsGroup extends StatelessWidget {
-  const StatisticsGroup({super.key});
+  const StatisticsGroup({
+    super.key,
+    required this.statistics,
+    required this.dateTime,
+  });
+
+  final List<Statistics> statistics;
+  final DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +21,7 @@ class StatisticsGroup extends StatelessWidget {
         SizedBox(
           width: 343.w,
           child: Text(
-            '20 January',
+            dateTime.shortFormat,
             style: AppTextStyles.textStyle2.copyWith(
               fontSize: 20.r,
               color: AppTheme.gray2.withOpacity(0.73),
@@ -23,14 +31,19 @@ class StatisticsGroup extends StatelessWidget {
         SizedBox(height: 16.h),
         Column(
           children: List.generate(
-            3,
-                (index) => Column(
-              children: [
-                if (index == 0) GradientDivider(),
-                HistoryCard(),
-                GradientDivider(),
-              ],
-            ),
+            statistics.length,
+            (index) {
+              final statistics = this.statistics[index];
+              return Column(
+                children: [
+                  if (index == 0) GradientDivider(),
+                  HistoryCard(
+                    statistics: statistics,
+                  ),
+                  GradientDivider(),
+                ],
+              );
+            },
           ),
         ),
       ],

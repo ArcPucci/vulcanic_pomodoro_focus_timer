@@ -12,9 +12,13 @@ class CalendarWidget extends StatefulWidget {
   const CalendarWidget({
     Key? key,
     required this.initialDate,
+    required this.onChangeRange,
+    required this.dates,
   }) : super(key: key);
 
   final DateTime initialDate;
+  final List<DateTime> dates;
+  final void Function(List<DateTime>) onChangeRange;
 
   @override
   State<CalendarWidget> createState() => _CalendarWidgetState();
@@ -51,6 +55,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   void initState() {
     super.initState();
     initDate = widget.initialDate.withZeroTime;
+    _dates = widget.dates;
     _calculateDays();
   }
 
@@ -359,6 +364,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 if (_dates.contains(date)) return;
                                 _dates.add(date);
                                 _dates.sort((a, b) => a.compareTo(b));
+                                widget.onChangeRange(_dates);
                                 setState(() {});
                               },
                               child: Container(
@@ -551,6 +557,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   void onReset() {
     _dates.clear();
+    widget.onChangeRange(_dates);
     initDate = DateTime.now().withZeroTime;
     setState(() {});
   }

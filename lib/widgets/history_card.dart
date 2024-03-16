@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
 class HistoryCard extends StatelessWidget {
-  const HistoryCard({super.key});
+  const HistoryCard({
+    super.key,
+    required this.statistics,
+  });
+
+  final Statistics statistics;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class HistoryCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Training',
+            statistics.title,
             style: AppTextStyles.textStyle2.copyWith(
               fontSize: 18.r,
             ),
@@ -35,7 +41,7 @@ class HistoryCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    '15:45',
+                    statistics.time,
                     style: AppTextStyles.textStyle8.copyWith(
                       fontSize: 16.r,
                       color: AppTheme.white.withOpacity(0.9),
@@ -53,7 +59,7 @@ class HistoryCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    '1h 00m',
+                    statistics.workTime.hoursAndMinutes,
                     style: AppTextStyles.textStyle8.copyWith(
                       fontSize: 16.r,
                       color: AppTheme.white.withOpacity(0.9),
@@ -71,7 +77,7 @@ class HistoryCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    '1h 00m',
+                    statistics.restTime.hoursAndMinutes,
                     style: AppTextStyles.textStyle8.copyWith(
                       fontSize: 16.r,
                       color: AppTheme.white.withOpacity(0.9),
@@ -89,7 +95,7 @@ class HistoryCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    '17',
+                    '${statistics.restRepeats + statistics.workRepeats}',
                     style: AppTextStyles.textStyle8.copyWith(
                       fontSize: 16.r,
                       color: AppTheme.white.withOpacity(0.9),

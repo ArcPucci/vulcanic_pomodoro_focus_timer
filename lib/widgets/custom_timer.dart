@@ -12,7 +12,6 @@ class CustomTimer extends StatelessWidget {
   const CustomTimer({
     super.key,
     required this.seconds,
-    required this.minutes,
     required this.percent,
     this.onTap,
     required this.timerView,
@@ -20,7 +19,6 @@ class CustomTimer extends StatelessWidget {
   });
 
   final int seconds;
-  final int minutes;
   final double percent;
   final VoidCallback? onTap;
   final TimerView timerView;
@@ -76,7 +74,7 @@ class CustomTimer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                      seconds.minutesAndSeconds,
                       style: AppTextStyles.textStyle10,
                     ),
                     SizedBox(height: 8.h),

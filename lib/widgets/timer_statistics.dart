@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:vulcanic_pomodoro_focus_timer/models/models.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
 class TimerStatistics extends StatelessWidget {
-  const TimerStatistics({super.key});
+  const TimerStatistics({
+    super.key,
+    required this.statistics,
+  });
+
+  final Statistics statistics;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class TimerStatistics extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'Training',
+            statistics.title,
             style: AppTextStyles.textStyle2.copyWith(
               fontSize: 18.r,
             ),
@@ -37,7 +43,7 @@ class TimerStatistics extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           Text(
-            '1h 00m',
+            statistics.workTime.hoursAndMinutes,
             style: AppTextStyles.textStyle8.copyWith(
               fontSize: 16.r,
               color: AppTheme.white.withOpacity(0.9),
@@ -52,7 +58,7 @@ class TimerStatistics extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           Text(
-            '1h 00m',
+            statistics.restTime.hoursAndMinutes,
             style: AppTextStyles.textStyle8.copyWith(
               fontSize: 16.r,
               color: AppTheme.white.withOpacity(0.9),
@@ -67,7 +73,7 @@ class TimerStatistics extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           Text(
-            '17',
+            "${statistics.workRepeats + statistics.restRepeats}",
             style: AppTextStyles.textStyle8.copyWith(
               fontSize: 16.r,
               color: AppTheme.white.withOpacity(0.9),

@@ -18,6 +18,7 @@ class TimerScreen extends StatelessWidget {
       create: (BuildContext context) {
         return TimerProvider(
           provider: Provider.of(context, listen: false),
+          statisticsProvider: Provider.of(context, listen: false),
         )..init();
       },
       child: Consumer2<TimerProvider, TimersProvider>(
@@ -31,7 +32,6 @@ class TimerScreen extends StatelessWidget {
                     Expanded(
                       child: CustomTimer(
                         seconds: value.seconds,
-                        minutes: value.minutes,
                         percent: value.percent,
                         onTap: value.onStart,
                         timerView: value.timerView,
@@ -75,7 +75,7 @@ class TimerScreen extends StatelessWidget {
                 left: 16.w,
                 right: 16.w,
                 child: GameAppBar(
-                  onExit: () => onLeave(context),
+                  onExit: () => onLeave(context, value),
                   onEdit: () async => await onEditTimer(context, value),
                   onDelete: () async {
                     if (!await onDelete(context)) return;
@@ -93,14 +93,17 @@ class TimerScreen extends StatelessWidget {
     );
   }
 
-  void onLeave(BuildContext context) async {
+  void onLeave(BuildContext context, TimerProvider value) async {
     final result = await showCupertinoDialog(
       context: context,
       builder: (context) {
         return CustomExitDialog();
       },
     );
-    if (result) context.pop();
+    if (!result) return;
+
+    value.onLeave();
+    context.pop();
   }
 
   Future<bool> onDelete(BuildContext context) async {

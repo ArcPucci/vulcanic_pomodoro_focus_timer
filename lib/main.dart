@@ -77,8 +77,18 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _router = GoRouter(
-      initialLocation: '/',
+      initialLocation: '/splash',
       routes: [
+        GoRoute(
+          path: '/splash',
+          pageBuilder: (context, state) {
+            return buildPageWithDefaultTransition(
+              context: context,
+              state: state,
+              child: const SplashScreen(),
+            );
+          },
+        ),
         GoRoute(
           path: '/welcome',
           pageBuilder: (context, state) {
@@ -86,6 +96,16 @@ class _MyAppState extends State<MyApp> {
               context: context,
               state: state,
               child: const WelcomeScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/premium',
+          pageBuilder: (context, state) {
+            return buildPageWithDefaultTransition(
+              context: context,
+              state: state,
+              child: PremiumScreen(onClose: () => context.go('/')),
             );
           },
         ),
@@ -167,6 +187,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => TimersService(widget.sqlService.database),
         ),
         Provider(
+          create: (context) => StatisticsService(widget.sqlService.database),
+        ),
+        Provider(
           create: (context) => PreferencesService(widget.sharedPreferences),
         ),
         ChangeNotifierProvider(
@@ -174,6 +197,11 @@ class _MyAppState extends State<MyApp> {
             preferencesService: Provider.of(context, listen: false),
             service: Provider.of(context, listen: false),
             router: _router,
+          )..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StatisticsProvider(
+            statisticsService: Provider.of(context, listen: false),
           )..init(),
         ),
         ChangeNotifierProvider(

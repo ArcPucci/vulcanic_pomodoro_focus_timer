@@ -36,7 +36,7 @@ class OverallStatistics extends StatelessWidget {
           Expanded(child: _buildTitle()),
           Expanded(
             child: Text(
-              '${minutes ~/ 60}h ${(minutes % 60).toString().padLeft(2, '0')}m',
+              minutes.hoursAndMinutes,
               textAlign: TextAlign.center,
               style: AppTextStyles.textStyle2.copyWith(
                 fontSize: 22.r,

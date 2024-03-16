@@ -6,7 +6,9 @@ import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
 class PremiumScreen extends StatelessWidget {
-  const PremiumScreen({super.key});
+  const PremiumScreen({super.key, this.onClose});
+
+  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class PremiumScreen extends StatelessWidget {
                     width: 343.w,
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
-                      onTap: Navigator.of(context).pop,
+                      onTap: onClose ?? Navigator.of(context).pop,
                       child: Image.asset(
                         'assets/png/icons/close.png',
                         width: 40.w,
@@ -116,7 +118,7 @@ class PremiumScreen extends StatelessWidget {
                   SizedBox(height: 8.h),
                   CustomButton2(
                     text: 'No Thanks',
-                    onTap: Navigator.of(context).pop,
+                    onTap: onClose ?? Navigator.of(context).pop,
                   ),
                   SizedBox(height: 29.h),
                   Opacity(
@@ -176,6 +178,6 @@ class PremiumScreen extends StatelessWidget {
       listen: false,
     );
     provider.onBuyPremium();
-    Navigator.of(context).pop();
+    (onClose ?? Navigator.of(context).pop).call();
   }
 }

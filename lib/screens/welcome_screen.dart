@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
@@ -59,11 +60,14 @@ class WelcomeScreen extends StatelessWidget {
               style: AppTextStyles.textStyle4,
             ),
             SizedBox(height: 72.h),
-            Image.asset(
-              'assets/png/buttons/play.png',
-              width: 170.w,
-              height: 170.h,
-              fit: BoxFit.contain,
+            GestureDetector(
+              onTap: () => context.go('/premium'),
+              child: Image.asset(
+                'assets/png/buttons/play.png',
+                width: 170.w,
+                height: 170.h,
+                fit: BoxFit.contain,
+              ),
             ),
             const Spacer(),
             Transform.scale(

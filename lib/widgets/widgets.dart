@@ -20,6 +20,7 @@ export 'dialogs/custom_delete_dialog.dart';
 export 'overall_statistics.dart';
 export 'create_timer_sheet.dart';
 export 'comment_widget.dart';
+export 'total_statistics.dart';
 export 'timer_statistics.dart';
 export 'history_card.dart';
 export 'gradient_divider.dart';

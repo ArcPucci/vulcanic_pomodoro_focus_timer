@@ -47,6 +47,19 @@ class SqlService {
         comment $textType
       )
     ''');
+    await db.execute('''
+      CREATE TABLE $statisticsTable (
+        id $idType,
+        timer_id $intType,
+        title $textType,
+        work_time $intType,
+        rest_time $intType,
+        work_repeats $intType,
+        rest_repeats $intType,
+        date_time $intType,
+        time $textType
+      )
+    ''');
   }
 
   Future<void> close() async {
