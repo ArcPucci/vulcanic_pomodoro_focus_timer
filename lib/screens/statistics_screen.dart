@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class StatisticsScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           TotalStatistics(statistics: value.totalStatistics),
-                          if(!value.firstTime)...[
+                          if (!value.firstTime) ...[
                             SizedBox(height: 28.h),
                             SizedBox(
                               width: 343.w,
@@ -46,10 +47,14 @@ class StatisticsScreen extends StatelessWidget {
                             Column(
                               children: List.generate(
                                 value.timerStatistics.length,
-                                    (index) {
-                                  final statistics = value.timerStatistics[index];
-                                  return TimerStatistics(
-                                    statistics: statistics,
+                                (index) {
+                                  final statistics =
+                                      value.timerStatistics[index];
+                                  return Padding(
+                                    padding: EdgeInsets.only(bottom: 16.h),
+                                    child: TimerStatistics(
+                                      statistics: statistics,
+                                    ),
                                   );
                                 },
                               ),
@@ -65,7 +70,7 @@ class StatisticsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if(value.firstTime) ...[
+                          if (value.firstTime) ...[
                             SizedBox(height: 16.h),
                             SizedBox(
                               width: 343.w,
@@ -84,12 +89,16 @@ class StatisticsScreen extends StatelessWidget {
                               value.dateTimes.length,
                               (index) {
                                 final date = value.dateTimes[index];
-                                final list = value.allStatistics[date]!;
+                                final list = value.allStatistics[date] ?? [];
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 18.h),
                                   child: StatisticsGroup(
                                     statistics: list,
                                     dateTime: date,
+                                    onDelete: (sts) async {
+                                      if(!await onDelete(context)) return;
+                                      value.onDelete(sts);
+                                    },
                                   ),
                                 );
                               },
@@ -129,6 +138,19 @@ class StatisticsScreen extends StatelessWidget {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  Future<bool> onDelete(BuildContext context) async {
+    return await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CustomDeleteDialog(
+          title: 'Delete the record from history?',
+          content:
+              'Are you sure you want to remove this note from history? This will update your overall statistics.',
         );
       },
     );

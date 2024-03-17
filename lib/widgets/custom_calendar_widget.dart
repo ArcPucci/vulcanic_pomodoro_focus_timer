@@ -155,6 +155,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               Spacer(),
               CustomIconButton(
                 asset: 'assets/png/icons/reset.png',
+                enabled: _dates.isNotEmpty,
                 onTap: onReset,
               ),
               SizedBox(width: 20.w),
@@ -364,7 +365,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 if (_dates.contains(date)) return;
                                 _dates.add(date);
                                 _dates.sort((a, b) => a.compareTo(b));
-                                widget.onChangeRange(_dates);
+                                if(_dates.length == 2) {
+                                  widget.onChangeRange(_dates);
+                                }
                                 setState(() {});
                               },
                               child: Container(
@@ -556,6 +559,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   void onReset() {
+    if(_dates.isEmpty) return;
     _dates.clear();
     widget.onChangeRange(_dates);
     initDate = DateTime.now().withZeroTime;

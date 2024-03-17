@@ -11,6 +11,7 @@ class PreferencesService {
   static const notificationKey = 'NOTIFICATION';
   static const firstInitKey = 'FIRST_INIT';
   static const volcanoKey = 'VOLCANO';
+  static const firstStatisticsKey = 'FIRST_STAT';
 
   Future<void> setPremium() async {
     await _preferences.setBool(premiumKey, true);
@@ -26,6 +27,14 @@ class PreferencesService {
 
   bool getFirstInit() {
     return _preferences.getBool(firstInitKey) ?? true;
+  }
+
+  Future<void> setFirstStat() async {
+    await _preferences.setBool(firstStatisticsKey, false);
+  }
+
+  bool getFirstStat() {
+    return _preferences.getBool(firstStatisticsKey) ?? true;
   }
 
   Future<void> setNotification(bool enabled) async {

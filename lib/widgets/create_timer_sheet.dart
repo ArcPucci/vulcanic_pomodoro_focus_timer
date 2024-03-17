@@ -211,6 +211,8 @@ class _CreateTimerSheetState extends State<CreateTimerSheet> {
       notificationEnabled: enabled,
     );
     widget.timersProvider.onCreateTimer(timerView);
+
+    Navigator.of(context).pop(true);
     onClear();
   }
 

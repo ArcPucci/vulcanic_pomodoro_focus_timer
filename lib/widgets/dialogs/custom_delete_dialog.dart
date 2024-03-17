@@ -2,17 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 
 class CustomDeleteDialog extends StatelessWidget {
-  const CustomDeleteDialog({super.key});
+  const CustomDeleteDialog({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  final String title;
+  final String content;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(
-        'Are You Sure You Want To Leave?',
+        title,
         style: AppTextStyles.dialogTitle,
       ),
       content: Text(
-        'This action will finish the timer, do you want to leave?',
+        content,
         style: AppTextStyles.dialogContent,
       ),
       actions: [

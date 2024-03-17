@@ -9,10 +9,12 @@ class StatisticsGroup extends StatelessWidget {
     super.key,
     required this.statistics,
     required this.dateTime,
+    required this.onDelete,
   });
 
   final List<Statistics> statistics;
   final DateTime dateTime;
+  final void Function(Statistics) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class StatisticsGroup extends StatelessWidget {
                   if (index == 0) GradientDivider(),
                   HistoryCard(
                     statistics: statistics,
+                    onDelete: () => onDelete(statistics),
                   ),
                   GradientDivider(),
                 ],

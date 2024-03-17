@@ -110,7 +110,10 @@ class TimerScreen extends StatelessWidget {
     return await showCupertinoDialog(
       context: context,
       builder: (context) {
-        return CustomDeleteDialog();
+        return CustomDeleteDialog(
+          title: 'Remove Pomodoro Timer?',
+          content: 'Are you sure you want to remove this timer?',
+        );
       },
     );
   }

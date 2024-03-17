@@ -202,6 +202,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => StatisticsProvider(
             statisticsService: Provider.of(context, listen: false),
+            preferencesService: Provider.of(context, listen: false),
           )..init(),
         ),
         ChangeNotifierProvider(

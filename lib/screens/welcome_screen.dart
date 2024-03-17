@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:vulcanic_pomodoro_focus_timer/services/preferences_service.dart';
 import 'package:vulcanic_pomodoro_focus_timer/utils/utils.dart';
 import 'package:vulcanic_pomodoro_focus_timer/widgets/widgets.dart';
 
@@ -61,7 +63,18 @@ class WelcomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 72.h),
             GestureDetector(
-              onTap: () => context.go('/premium'),
+              onTap: () {
+                final provider = Provider.of<PreferencesService>(
+                  context,
+                  listen: false,
+                );
+
+                if(provider.getPremium()) {
+                  context.go('/');
+                } else {
+                  context.go('/premium');
+                }
+              },
               child: Image.asset(
                 'assets/png/buttons/play.png',
                 width: 170.w,

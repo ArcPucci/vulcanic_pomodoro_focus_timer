@@ -4,12 +4,15 @@ import 'package:vulcanic_pomodoro_focus_timer/services/services.dart';
 
 class StatisticsProvider extends ChangeNotifier {
   final StatisticsService _statisticsService;
+  final PreferencesService _preferencesService;
 
   StatisticsProvider({
     required StatisticsService statisticsService,
-  }) : _statisticsService = statisticsService;
+    required PreferencesService preferencesService,
+  })  : _statisticsService = statisticsService,
+        _preferencesService = preferencesService;
 
-  bool _firstTime = false;
+  bool _firstTime = true;
 
   bool get firstTime => _firstTime;
 
@@ -42,7 +45,7 @@ class StatisticsProvider extends ChangeNotifier {
   bool get loading => _loading;
 
   void init() async {
-    _firstTime = await _statisticsService.checkFirstTime();
+    _firstTime = _preferencesService.getFirstStat();
     notifyListeners();
     _onUpdateStatistics();
   }
@@ -54,6 +57,10 @@ class StatisticsProvider extends ChangeNotifier {
 
   void _onUpdate() {
     _totalStatistics = Statistics.empty();
+
+    _timerStatistics.clear();
+    _allStatistics.clear();
+    _dateTimes.clear();
 
     _loading = true;
     notifyListeners();
@@ -83,12 +90,12 @@ class StatisticsProvider extends ChangeNotifier {
     if (_timerStatistics[statistics.title] == null) {
       _timerStatistics[statistics.title] = statistics;
     } else {
-      final workTime = _timerStatistics[statistics.timerId]!.workTime;
-      final restTime = _timerStatistics[statistics.timerId]!.restTime;
-      final workRepeats = _timerStatistics[statistics.timerId]!.workRepeats;
-      final restRepeats = _timerStatistics[statistics.timerId]!.restRepeats;
+      final workTime = _timerStatistics[statistics.title]!.workTime;
+      final restTime = _timerStatistics[statistics.title]!.restTime;
+      final workRepeats = _timerStatistics[statistics.title]!.workRepeats;
+      final restRepeats = _timerStatistics[statistics.title]!.restRepeats;
       _timerStatistics[statistics.title] =
-          _timerStatistics[statistics.timerId]!.copyWith(
+          _timerStatistics[statistics.title]!.copyWith(
         workTime: workTime + statistics.workTime,
         restTime: restTime + statistics.restTime,
         workRepeats: workRepeats + statistics.workRepeats,
@@ -112,12 +119,22 @@ class StatisticsProvider extends ChangeNotifier {
 
   void onCreate(Statistics statistics) async {
     await _statisticsService.onCreate(statistics);
+
+    if(_firstTime) {
+      _firstTime = false;
+      await _preferencesService.setFirstStat();
+    }
+
     _onUpdateStatistics();
   }
 
   void onChangeRange(List<DateTime> newDates) async {
     _dates = newDates;
-    await _statisticsService.getStatistics(_dates);
+    _onUpdateStatistics();
+  }
+
+  void onDelete(Statistics statistics) async {
+    await _statisticsService.onDelete(statistics);
     _onUpdateStatistics();
   }
 }
