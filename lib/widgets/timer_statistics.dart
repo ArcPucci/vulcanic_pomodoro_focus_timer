@@ -28,13 +28,17 @@ class TimerStatistics extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         children: [
-          Text(
-            statistics.title,
-            style: AppTextStyles.textStyle2.copyWith(
-              fontSize: 18.r,
+          Expanded(
+            child: Text(
+              statistics.title,
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.textStyle2.copyWith(
+                fontSize: 18.r,
+              ),
             ),
           ),
-          Spacer(),
+          SizedBox(width: 16.w),
           Image.asset(
             'assets/png/work.png',
             width: 17.w,

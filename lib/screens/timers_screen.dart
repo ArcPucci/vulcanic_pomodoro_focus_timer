@@ -33,7 +33,10 @@ class TimersScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final timerView = value.timers[index];
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
+                          padding: EdgeInsets.only(
+                            bottom:
+                                index != value.timers.length - 1 ? 16.h : 100.h,
+                          ),
                           child: TimerCard(
                             onPlay: () => value.onSelectTimer(timerView),
                             onDelete: () async {

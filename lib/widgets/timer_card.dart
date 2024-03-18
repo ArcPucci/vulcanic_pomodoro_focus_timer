@@ -53,6 +53,7 @@ class TimerCard extends StatelessWidget {
                 children: [
                   Text(
                     timerView.name,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.textStyle2.copyWith(
                       fontSize: 22.r,
                     ),

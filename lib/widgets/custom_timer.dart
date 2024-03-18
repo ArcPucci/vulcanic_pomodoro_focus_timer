@@ -34,7 +34,11 @@ class CustomTimer extends StatelessWidget {
             return Positioned(
               left: 0,
               right: 0,
-              bottom: (value.volcano.id == 0 && workTime) ? 230.h : 200.h,
+              bottom: (value.volcano.id == 0 && workTime)
+                  ? 230.h
+                  : (value.volcano.id == 1 && workTime)
+                      ? 210.h
+                      : 200.h,
               child: Center(
                 child: Transform.scale(
                   scale: 2,

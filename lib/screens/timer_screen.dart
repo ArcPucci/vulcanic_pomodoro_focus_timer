@@ -46,7 +46,7 @@ class TimerScreen extends StatelessWidget {
                         children: [
                           SizedBox(width: 45.w),
                           Text(
-                            'Work Time',
+                            value.workTime ? 'Work Time' : 'Rest Time',
                             style: AppTextStyles.textStyle2.copyWith(
                               fontSize: 28.r,
                             ),
