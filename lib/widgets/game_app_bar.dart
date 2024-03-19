@@ -12,6 +12,7 @@ class GameAppBar extends StatelessWidget {
     this.onEdit,
     this.onReset,
     this.hasReset = false,
+    required this.title,
   });
 
   final VoidCallback? onExit;
@@ -19,6 +20,7 @@ class GameAppBar extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onReset;
   final bool hasReset;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class GameAppBar extends StatelessWidget {
               ),
               SizedBox(width: 16.w),
               Text(
-                'Morning',
+                title,
                 style: AppTextStyles.textStyle2.copyWith(
                   fontSize: 22.r,
                 ),
@@ -73,16 +75,16 @@ class GameAppBar extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.h),
-              if(hasReset)
-              GestureDetector(
-                onTap: onReset,
-                child: Image.asset(
-                  'assets/png/buttons/reset.png',
-                  width: 45.w,
-                  height: 45.h,
-                  fit: BoxFit.contain,
+              if (hasReset)
+                GestureDetector(
+                  onTap: onReset,
+                  child: Image.asset(
+                    'assets/png/buttons/reset.png',
+                    width: 45.w,
+                    height: 45.h,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
             ],
           ),
         ],

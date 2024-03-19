@@ -75,6 +75,7 @@ class TimerScreen extends StatelessWidget {
                 left: 16.w,
                 right: 16.w,
                 child: GameAppBar(
+                  title: value.timerView.name,
                   onExit: () => onLeave(context, value),
                   onEdit: () async => await onEditTimer(context, value),
                   onDelete: () async {
